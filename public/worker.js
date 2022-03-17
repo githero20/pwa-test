@@ -33,23 +33,23 @@ self.addEventListener("fetch", (event) => {
       );
     })
   );
-  // if (!navigator.onLine) {
-  //   if (event.request.url === "http://localhost:3000/static/js/main.chunk.js") {
-  //     event.waitUntil(
-  //       self.registration.showNotification("Offline", {
-  //         body: "you are now offline",
-  //         icon: "logo.png",
-  //       })
-  //     );
-  //   }
-  // }
   if (!navigator.onLine) {
-    event.waitUntil(
-      self.registration.showNotification("Offline", {
-        body: "you are now offline",
-        icon: "logo.png",
-      })
-    );
+    if (event.request.url === `${process.env.FRONTEND_URL}/static/js/main.chunk.js`) {
+      event.waitUntil(
+        self.registration.showNotification("Offline", {
+          body: "you are now offline",
+          icon: "logo.png",
+        })
+      );
+    }
+  }
+  // if (!navigator.onLine) {
+  //   event.waitUntil(
+  //     self.registration.showNotification("Offline", {
+  //       body: "you are now offline",
+  //       icon: "logo.png",
+  //     })
+  //   );
   }
 });
 
