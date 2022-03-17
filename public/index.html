@@ -58,4 +58,54 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      function urlBase64ToUint8Array(base64String) {
+        const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding)
+          .replace(/\-/g, "+")
+          .replace(/_/g, "/");
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+          outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+      }
+
+      function determineAppServerKey() {
+        var vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+        return urlBase64ToUint8Array(vapidPublicKey);
+      }
+
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("/worker.js")
+          .then(
+            function (registration) {
+              console.log("Worker registration successful", registration.scope);
+              return registration.pushManager
+                .getSubscription()
+                .then(function (subscription) {
+                  registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: determineAppServerKey(),
+                  });
+                });
+            },
+            function (err) {
+              console.log("Worker registration failed", err);
+            }
+          )
+          .catch(function (err) {
+            console.log(err);
+          });
+      });
+    } else {
+      console.log("Service Worker is not supported by browser.");
+    }
+  </script>
 </html>
