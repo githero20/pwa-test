@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 var STATIC_CACHE_NAME = "gfg-pwa";
-var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
+// var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
 
 // Add Routes and pages using React Browser Router
 var urlsToCache = ["/", "/index.html", "../src/index.js"];
@@ -22,34 +22,35 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((cacheRes) => {
       // If the file is not present in STATIC_CACHE,
       // it will be searched in DYNAMIC_CACHE
-      return (
-        cacheRes ||
-        fetch(event.request).then((fetchRes) => {
-          return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-            cache.put(event.request.url, fetchRes.clone());
-            return fetchRes;
-          });
-        })
-      );
+      return cacheRes || fetch(event.request);
+      // .then((fetchRes) => {
+      //   return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+      //     cache.put(event.request.url, fetchRes.clone());
+      //     return fetchRes;
+      //   });
+      // })
     })
   );
-  if (!navigator.onLine) {
-    if (event.request.url === `${process.env.FRONTEND_URL}/static/js/main.chunk.js`) {
-      event.waitUntil(
-        self.registration.showNotification("Offline", {
-          body: "you are now offline",
-          icon: "logo.png",
-        })
-      );
-    }
-  }
   // if (!navigator.onLine) {
-  //   event.waitUntil(
-  //     self.registration.showNotification("Offline", {
-  //       body: "you are now offline",
-  //       icon: "logo.png",
-  //     })
-  //   );
+  //   if (
+  //     event.request.url ===
+  //     `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
+  //   ) {
+  //     event.waitUntil(
+  //       self.registration.showNotification("Offline", {
+  //         body: "you are now offline",
+  //         icon: "logo.png",
+  //       })
+  //     );
+  //   }
+  // }
+  if (!navigator.onLine) {
+    event.waitUntil(
+      self.registration.showNotification("Offline", {
+        body: "you are now offline",
+        icon: "logo.png",
+      })
+    );
   }
 });
 

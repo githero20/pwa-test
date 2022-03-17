@@ -77,10 +77,9 @@
       }
 
       function determineAppServerKey() {
-        var vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+        var vapidPublicKey = public_key;
         return urlBase64ToUint8Array(vapidPublicKey);
       }
-
       window.addEventListener("load", function () {
         navigator.serviceWorker
           .register("/worker.js")
