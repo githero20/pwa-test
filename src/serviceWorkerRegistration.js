@@ -54,7 +54,7 @@ export function register(config) {
   }
 }
 
-function urlBase64ToUint8Array(base64String) {
+export function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
     .replace(/\-/g, "+")
@@ -69,8 +69,8 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-function determineAppServerKey() {
-  var vapidPublicKey = `${process.env.VAPID_PUBLIC_KEY}`;
+export function determineAppServerKey() {
+  var vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
   return urlBase64ToUint8Array(vapidPublicKey);
 }
 
