@@ -50,7 +50,7 @@ self.addEventListener("fetch", (event) => {
   //       icon: "logo.png",
   //     })
   //   );
-  }
+//   }
 });
 
 // Update a service worker
