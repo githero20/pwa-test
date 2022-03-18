@@ -71,7 +71,8 @@ export function urlBase64ToUint8Array(base64String) {
 }
 
 export function determineAppServerKey() {
-  var vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+  var vapidPublicKey =
+    "BLm0jwWpBRw1Q-ECOfMMfLdanNepD1gZ06e3LDs3dki9XAtSXYeu1VCJh9H0PgYdNaeapjkiuyDm7bQx5xs0DJQ";
   return urlBase64ToUint8Array(vapidPublicKey);
 }
 
