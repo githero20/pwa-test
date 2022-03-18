@@ -8,7 +8,7 @@
 // resources are updated in the background.
 
 // To learn more about the benefits of this model and instructions on how to
-// opt-in, read https://cra.link/PWAf
+// opt-in, read https://cra.link/PWA
 
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
@@ -54,27 +54,6 @@ export function register(config) {
   }
 }
 
-export function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    // eslint-disable-next-line no-useless-escape
-    .replace(/\-/g, "+")
-    .replace(/_/g, "/");
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
-export function determineAppServerKey() {
-  var vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
-  return urlBase64ToUint8Array(vapidPublicKey);
-}
-
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
@@ -86,14 +65,6 @@ function registerValidSW(swUrl, config) {
         }
         installingWorker.onstatechange = () => {
           if (installingWorker.state === "installed") {
-            // registration.pushManager
-            //   .getSubscription()
-            //   .then(function (subscription) {
-            //     registration.pushManager.subscribe({
-            //       userVisibleOnly: true,
-            //       applicationServerKey: determineAppServerKey(),
-            //     });
-            //   });
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
@@ -168,7 +139,3 @@ export function unregister() {
       });
   }
 }
-
-// window.addEventListener("offline", function () {
-//   console.log("Oh no, you lost your network connection.");
-// });

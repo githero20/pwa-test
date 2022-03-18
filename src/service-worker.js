@@ -121,68 +121,68 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// Cache and return requests
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cacheRes) => {
-      // If the file is not present in STATIC_CACHE,
-      // it will be searched in DYNAMIC_CACHE
-      return (
-        cacheRes ||
-        fetch(event.request).then((fetchRes) => {
-          return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-            cache.put(event.request.url, fetchRes.clone());
-            return fetchRes;
-          });
-        })
-      );
-    })
-  );
-  // if (!navigator.onLine) {
-  //   if (
-  //     event.request.url === `http://localhost:3000/static/js/main.chunk.js`
-  //     // `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
-  //   ) {
-  //     event.waitUntil(
-  //       self.registration.showNotification("Offline", {
-  //         body: "you are now offline",
-  //         icon: "logo.png",
-  //       })
-  //     );
-  //   }
-  // }
-  if (!navigator.onLine) {
-    if (
-      event.request.url ===
-      `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
-    ) {
-      event.waitUntil(
-        self.registration.showNotification("Offline", {
-          body: "you are now offline",
-          icon: "logo.png",
-        })
-      );
-    }
-  }
-});
-
-// Update a service worker
-self.addEventListener("activate", (event) => {
-  var cacheWhitelist = ["gfg-pwa"];
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        // eslint-disable-next-line array-callback-return
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
-// window.addEventListener("offline", function () {
-//   console.log("Oh no, you lost your network connection.");
+// // Cache and return requests
+// self.addEventListener("fetch", (event) => {
+//   event.respondWith(
+//     caches.match(event.request).then((cacheRes) => {
+//       // If the file is not present in STATIC_CACHE,
+//       // it will be searched in DYNAMIC_CACHE
+//       return (
+//         cacheRes ||
+//         fetch(event.request).then((fetchRes) => {
+//           return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+//             cache.put(event.request.url, fetchRes.clone());
+//             return fetchRes;
+//           });
+//         })
+//       );
+//     })
+//   );
+//   // if (!navigator.onLine) {
+//   //   if (
+//   //     event.request.url === `http://localhost:3000/static/js/main.chunk.js`
+//   //     // `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
+//   //   ) {
+//   //     event.waitUntil(
+//   //       self.registration.showNotification("Offline", {
+//   //         body: "you are now offline",
+//   //         icon: "logo.png",
+//   //       })
+//   //     );
+//   //   }
+//   // }
+//   if (!navigator.onLine) {
+//     if (
+//       event.request.url ===
+//       `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
+//     ) {
+//       event.waitUntil(
+//         self.registration.showNotification("Offline", {
+//           body: "you are now offline",
+//           icon: "logo.png",
+//         })
+//       );
+//     }
+//   }
 // });
+
+// // Update a service worker
+// self.addEventListener("activate", (event) => {
+//   var cacheWhitelist = ["gfg-pwa"];
+//   event.waitUntil(
+//     caches.keys().then((cacheNames) => {
+//       return Promise.all(
+//         // eslint-disable-next-line array-callback-return
+//         cacheNames.map((cacheName) => {
+//           if (cacheWhitelist.indexOf(cacheName) === -1) {
+//             return caches.delete(cacheName);
+//           }
+//         })
+//       );
+//     })
+//   );
+// });
+
+// // window.addEventListener("offline", function () {
+// //   console.log("Oh no, you lost your network connection.");
+// // });
