@@ -59,7 +59,7 @@
     -->
   </body>
 
-  <script>
+  <!-- <script>
     if ("serviceWorker" in navigator) {
       function urlBase64ToUint8Array(base64String) {
         const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -77,7 +77,7 @@
       }
 
       function determineAppServerKey() {
-        var vapidPublicKey = public_key;
+        var vapidPublicKey = `${process.env.VAPID_PUBLIC_KEY}`;
         return urlBase64ToUint8Array(vapidPublicKey);
       }
       window.addEventListener("load", function () {
@@ -106,5 +106,5 @@
     } else {
       console.log("Service Worker is not supported by browser.");
     }
-  </script>
+  </script> -->
 </html>

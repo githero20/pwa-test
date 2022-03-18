@@ -17,8 +17,10 @@ const requestHelper = async (path, type) => {
     },
   });
 
+  localStorage.setItem("s-token", token);
+
   const res = await axios.get(`${api.baseUrl}/browse/${path}?locale=en_US`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${localStorage.getItem("s-token")}` },
   });
 
   return res.data[type].items;
