@@ -86,14 +86,14 @@ function registerValidSW(swUrl, config) {
         }
         installingWorker.onstatechange = () => {
           if (installingWorker.state === "installed") {
-            registration.pushManager
-              .getSubscription()
-              .then(function (subscription) {
-                registration.pushManager.subscribe({
-                  userVisibleOnly: true,
-                  applicationServerKey: determineAppServerKey(),
-                });
-              });
+            // registration.pushManager
+            //   .getSubscription()
+            //   .then(function (subscription) {
+            //     registration.pushManager.subscribe({
+            //       userVisibleOnly: true,
+            //       applicationServerKey: determineAppServerKey(),
+            //     });
+            //   });
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
