@@ -103,23 +103,23 @@ self.addEventListener("message", (event) => {
 //   console.log(`intercepting ${e.request.method} to ${e.request.url}`);
 // });
 
-/* eslint-disable no-restricted-globals */
-var STATIC_CACHE_NAME = "gfg-pwa";
-var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
+// /* eslint-disable no-restricted-globals */
+// var STATIC_CACHE_NAME = "gfg-pwa";
+// var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
 
-// Add Routes and pages using React Browser Router
-var urlsToCache = ["/", "/index.html", "../src/index.js"];
+// // Add Routes and pages using React Browser Router
+// var urlsToCache = ["/", "/index.html", "../src/index.js"];
 
-// Install a service worker
-self.addEventListener("install", (event) => {
-  // Perform install steps
-  event.waitUntil(
-    caches.open(STATIC_CACHE_NAME).then(function (cache) {
-      console.log("Opened cache");
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+// // Install a service worker
+// self.addEventListener("install", (event) => {
+//   // Perform install steps
+//   event.waitUntil(
+//     caches.open(STATIC_CACHE_NAME).then(function (cache) {
+//       console.log("Opened cache");
+//       return cache.addAll(urlsToCache);
+//     })
+//   );
+// });
 
 // // Cache and return requests
 // self.addEventListener("fetch", (event) => {
