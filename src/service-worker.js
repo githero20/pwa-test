@@ -108,7 +108,7 @@ var STATIC_CACHE_NAME = "gfg-pwa";
 var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
 
 // Add Routes and pages using React Browser Router
-var urlsToCache = ["/", "/index.html", "../src/index.js"];
+var urlsToCache = ["/index.html"];
 
 // Install a service worker
 self.addEventListener("install", (event) => {
