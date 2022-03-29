@@ -123,6 +123,9 @@ self.addEventListener("install", (event) => {
 
 // Cache and return requests
 self.addEventListener("fetch", (event) => {
+  if (!event.request.url.startsWith("http")) {
+    //skip request
+  }
   event.respondWith(
     caches.match(event.request).then((cacheRes) => {
       // If the file is not present in STATIC_CACHE,
@@ -131,8 +134,14 @@ self.addEventListener("fetch", (event) => {
         cacheRes ||
         fetch(event.request).then((fetchRes) => {
           return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-            cache.put(event.request.url, fetchRes.clone());
-            return fetchRes;
+            if (event.request.url.match("^(http|https)://")) {
+              cache.put(event.request.url, fetchRes.clone());
+              return fetchRes;
+            } else {
+              return;
+            }
+            // cache.put(event.request.url, fetchRes.clone());
+            // return fetchRes;
           });
         })
       );
