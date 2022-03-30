@@ -123,30 +123,29 @@ self.addEventListener("install", (event) => {
 
 // Cache and return requests
 self.addEventListener("fetch", (event) => {
-  if (!event.request.url.startsWith("http")) {
-    //skip request
-  }
-  event.respondWith(
-    caches.match(event.request).then((cacheRes) => {
-      // If the file is not present in STATIC_CACHE,
-      // it will be searched in DYNAMIC_CACHE
-      return (
-        cacheRes ||
-        fetch(event.request).then((fetchRes) => {
-          return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-            if (event.request.url.match("^(http|https)://")) {
+  // if (!event.request.url.startsWith("http")) {
+  //   self.skipEvent()
+  // }
+  if (event.request.url.match("^(http|https)://")) {
+    event.respondWith(
+      caches.match(event.request).then((cacheRes) => {
+        // If the file is not present in STATIC_CACHE,
+        // it will be searched in DYNAMIC_CACHE
+        return (
+          cacheRes ||
+          fetch(event.request).then((fetchRes) => {
+            return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
               cache.put(event.request.url, fetchRes.clone());
               return fetchRes;
-            } else {
-              return;
-            }
-            // cache.put(event.request.url, fetchRes.clone());
-            // return fetchRes;
-          });
-        })
-      );
-    })
-  );
+            });
+          })
+        );
+      })
+    );
+  } else {
+    console.log("does not match the http/https format");
+  }
+
   if (!navigator.onLine) {
     if (
       event.request.url ===

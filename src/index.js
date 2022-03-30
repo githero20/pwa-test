@@ -4,6 +4,9 @@ import Routes from "./routes";
 import CoreLayout from "./common/layouts/CoreLayout";
 import "./styles/_main.scss";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
+
+initializeIcons();
 
 ReactDOM.render(
   <React.StrictMode>
