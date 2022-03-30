@@ -108,7 +108,13 @@ var STATIC_CACHE_NAME = "gfg-pwa";
 var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
 
 // Add Routes and pages using React Browser Router
-var urlsToCache = ["/index.html"];
+var urlsToCache = [
+  "/index.html",
+  "/css/main.css",
+  "/js/main.js",
+  "/img/favicon.png",
+  "/offline/",
+];
 
 // Install a service worker
 self.addEventListener("install", (event) => {
@@ -128,45 +134,52 @@ self.addEventListener("fetch", (event) => {
   // }
   if (event.request.url.match("^(http|https)://")) {
     event.respondWith(
-      caches.match(event.request).then((cacheRes) => {
-        // If the file is not present in STATIC_CACHE,
-        // it will be searched in DYNAMIC_CACHE
-        return (
-          cacheRes ||
-          fetch(event.request).then((fetchRes) => {
-            return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-              cache.put(event.request.url, fetchRes.clone());
-              return fetchRes;
-            });
-          })
-        );
-      })
+      caches
+        .match(event.request)
+        .then((cacheRes) => {
+          // If the file is not present in STATIC_CACHE,
+          // it will be searched in DYNAMIC_CACHE
+          return (
+            cacheRes ||
+            fetch(event.request).then((fetchRes) => {
+              event.waitUntil(
+                caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+                  cache.put(event.request.url, fetchRes.clone());
+                  return fetchRes;
+                })
+              );
+            })
+          );
+        })
+        // If offline, pull the offline page
+        .catch(() => caches.match("/offline/"))
     );
-  } else {
-    console.log("does not match the http/https format");
+    // end the response
   }
 
+  // if (!navigator.onLine) {
+  //   if (
+  //     event.request.url ===
+  //     `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
+  //   ) {
+  //     event.waitUntil(
+  //       self.registration.showNotification("Offline", {
+  //         body: "you are now offline",
+  //         icon: "logo.png",
+  //       })
+  //     );
+  //   }
+  // }
   if (!navigator.onLine) {
-    if (
-      event.request.url ===
-      `${process.env.FRONTEND_URL}/static/js/main.chunk.js`
-    ) {
-      event.waitUntil(
+    event.waitUntil(
+      setTimeout(() => {
         self.registration.showNotification("Offline", {
           body: "you are now offline",
           icon: "logo.png",
-        })
-      );
-    }
+        });
+      }, 3000)
+    );
   }
-  // if (!navigator.onLine) {
-  //   event.waitUntil(
-  //     self.registration.showNotification("Offline", {
-  //       body: "you are now offline",
-  //       icon: "logo.png",
-  //     })
-  //   );
-  //   }
 });
 
 // Update a service worker
@@ -184,4 +197,12 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+});
+
+window.addEventListener("online", function () {
+  console.log("You are online!");
+});
+
+window.addEventListener("offline", function () {
+  console.log("Oh no, you lost your network connection.");
 });
