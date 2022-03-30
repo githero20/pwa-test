@@ -108,13 +108,7 @@ var STATIC_CACHE_NAME = "gfg-pwa";
 var DYNAMIC_CACHE_NAME = "dynamic-gfg-pwa";
 
 // Add Routes and pages using React Browser Router
-var urlsToCache = [
-  "/index.html",
-  "/css/main.css",
-  "/js/main.js",
-  "/img/favicon.png",
-  "/offline/",
-];
+var urlsToCache = ["/index.html", "/offline/"];
 
 // Install a service worker
 self.addEventListener("install", (event) => {
@@ -134,29 +128,23 @@ self.addEventListener("fetch", (event) => {
   // }
   if (event.request.url.match("^(http|https)://")) {
     event.respondWith(
-      caches
-        .match(event.request)
-        .then((cacheRes) => {
-          // If the file is not present in STATIC_CACHE,
-          // it will be searched in DYNAMIC_CACHE
-          return (
-            cacheRes ||
-            fetch(event.request).then((fetchRes) => {
-              event.waitUntil(
-                caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-                  cache.put(event.request.url, fetchRes.clone());
-                  return fetchRes;
-                })
-              );
-            })
-          );
-        })
-        // If offline, pull the offline page
-        .catch(() => caches.match("/offline/"))
+      caches.match(event.request).then((cacheRes) => {
+        // If the file is not present in STATIC_CACHE,
+        // it will be searched in DYNAMIC_CACHE
+        return (
+          cacheRes ||
+          fetch(event.request).then((fetchRes) => {
+            event.waitUntil(
+              caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+                cache.put(event.request.url, fetchRes.clone());
+                return fetchRes;
+              })
+            );
+          })
+        ).catch(() => caches.match("/offline/"));
+      })
     );
-    // end the response
   }
-
   // if (!navigator.onLine) {
   //   if (
   //     event.request.url ===
@@ -171,15 +159,13 @@ self.addEventListener("fetch", (event) => {
   //   }
   // }
   if (!navigator.onLine) {
-    console.log("You are offline");
-    // event.waitUntil(
-    //   setTimeout(() => {
-    //     self.registration.showNotification("Offline", {
-    //       body: "you are now offline",
-    //       icon: "logo.png",
-    //     });
-    //   }, 3000)
-    // );
+    event.waitUntil(
+      console.log("you are now offline")
+      // self.registration.showNotification("Offline", {
+      //   body: "you are now offline",
+      //   icon: "logo.png",
+      // })
+    );
   }
 });
 
