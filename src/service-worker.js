@@ -141,7 +141,7 @@ self.addEventListener("fetch", (event) => {
               })
             );
           })
-        ).catch(() => caches.match("/offline/"));
+        ).catch(() => caches.match("/index.html"));
       })
     );
   }
