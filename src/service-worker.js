@@ -171,14 +171,15 @@ self.addEventListener("fetch", (event) => {
   //   }
   // }
   if (!navigator.onLine) {
-    event.waitUntil(
-      setTimeout(() => {
-        self.registration.showNotification("Offline", {
-          body: "you are now offline",
-          icon: "logo.png",
-        });
-      }, 3000)
-    );
+    console.log("You are offline");
+    // event.waitUntil(
+    //   setTimeout(() => {
+    //     self.registration.showNotification("Offline", {
+    //       body: "you are now offline",
+    //       icon: "logo.png",
+    //     });
+    //   }, 3000)
+    // );
   }
 });
 
@@ -197,12 +198,4 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
-});
-
-window.addEventListener("online", function () {
-  console.log("You are online!");
-});
-
-window.addEventListener("offline", function () {
-  console.log("Oh no, you lost your network connection.");
 });
